@@ -1079,6 +1079,10 @@ end}.
     {datatype, string}
 ]}.
 
+{mapping, "log.default.level", "rabbit.log.categories.default.level", [
+    {datatype, {enum, [debug, info, notice, warning, error, critical, alert, emergency, none]}}
+]}.
+
 % ===============================
 % Validators
 % ===============================

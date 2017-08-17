@@ -216,7 +216,6 @@ configure_lager() ->
         {ok, _Val} ->
             ok
     end,
-    io:format("Lager config: ~p~n", [application:get_all_env(lager)]),
     ok.
 
 remove_rabbit_handlers(Handlers, FormerHandlers) ->
@@ -378,7 +377,11 @@ generate_lager_sinks(SinkNames, SinkConfigs) ->
                 [{lager_forwarder_backend,
                     [lager_util:make_internal_sink_name(lager), Level]}];
             GeneratedHandlers ->
-                GeneratedHandlers
+                lists:map(
+                    fun({Name, Handler}) ->
+                        {Name, lists:keystore(level, 1, Handler, {level, Level})}
+                    end,
+                    GeneratedHandlers)
         end,
         {SinkName, [{handlers, Handlers}, {rabbit_handlers, Handlers}]}
     end,
